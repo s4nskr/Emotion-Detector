@@ -1,3 +1,4 @@
+```python
 import streamlit as st
 import cv2
 import numpy as np
@@ -38,7 +39,6 @@ EMOTION_EMOJIS = {
     "surprise": "😲",
     "neutral": "😐"
 }
-
 
 EMOTION_COLORS = {
     "angry": "#ef4444",
@@ -167,13 +167,9 @@ with st.sidebar:
     st.subheader("🧠 AI Technology")
 
     st.write("• DeepFace")
-
     st.write("• OpenCV")
-
     st.write("• Facial Expression Analysis")
-
     st.write("• Python")
-
     st.write("• Streamlit")
 
     st.divider()
@@ -223,9 +219,9 @@ if input_method == "📷 Camera":
         "of your face."
     )
 
+    # Removed resolution="720p" for compatibility
     image_file = st.camera_input(
-        "Take a picture",
-        resolution="720p"
+        "Take a picture"
     )
 
 
@@ -264,7 +260,6 @@ if image_file is not None:
         cv2.IMREAD_COLOR
     )
 
-
     if frame is None:
 
         st.error(
@@ -274,16 +269,13 @@ if image_file is not None:
         st.stop()
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # IMAGE DISPLAY
-    # --------------------------------------------------------
+    # ========================================================
 
     st.subheader("🖼️ Selected Image")
 
-    col1, col2 = st.columns(
-        [2, 1]
-    )
-
+    col1, col2 = st.columns([2, 1])
 
     with col1:
 
@@ -294,7 +286,6 @@ if image_file is not None:
             ),
             use_container_width=True
         )
-
 
     with col2:
 
@@ -316,12 +307,11 @@ if image_file is not None:
         )
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # DEEPFACE
-    # --------------------------------------------------------
+    # ========================================================
 
     st.subheader("🧠 AI Emotion Analysis")
-
 
     with st.spinner(
         "Analyzing facial expression..."
@@ -337,15 +327,13 @@ if image_file is not None:
                 silent=True
             )
 
-
             if isinstance(result, list):
-
                 result = result[0]
 
 
-            # ------------------------------------------------
+            # =================================================
             # RESULT
-            # ------------------------------------------------
+            # =================================================
 
             dominant_emotion = result[
                 "dominant_emotion"
@@ -355,10 +343,9 @@ if image_file is not None:
                 "emotion"
             ]
 
-            confidence = emotion_scores[
-                dominant_emotion
-            ]
-
+            confidence = float(
+                emotion_scores[dominant_emotion]
+            )
 
             emoji = EMOTION_EMOJIS.get(
                 dominant_emotion,
@@ -366,9 +353,9 @@ if image_file is not None:
             )
 
 
-            # ------------------------------------------------
+            # =================================================
             # SAVE HISTORY
-            # ------------------------------------------------
+            # =================================================
 
             st.session_state.history.append(
                 {
@@ -377,12 +364,11 @@ if image_file is not None:
 
                     "Confidence":
                         round(
-                            float(confidence),
+                            confidence,
                             2
                         )
                 }
             )
-
 
             # Keep only latest 10
             st.session_state.history = (
@@ -390,9 +376,9 @@ if image_file is not None:
             )
 
 
-            # ------------------------------------------------
+            # =================================================
             # RESULT CARD
-            # ------------------------------------------------
+            # =================================================
 
             st.markdown(
                 f"""
@@ -419,16 +405,14 @@ if image_file is not None:
                 unsafe_allow_html=True
             )
 
-
             st.write("")
 
 
-            # ------------------------------------------------
+            # =================================================
             # METRICS
-            # ------------------------------------------------
+            # =================================================
 
             col1, col2, col3 = st.columns(3)
-
 
             with col1:
 
@@ -437,14 +421,12 @@ if image_file is not None:
                     dominant_emotion.capitalize()
                 )
 
-
             with col2:
 
                 st.metric(
                     "📊 Confidence",
                     f"{confidence:.2f}%"
                 )
-
 
             with col3:
 
@@ -457,14 +439,13 @@ if image_file is not None:
             st.divider()
 
 
-            # ------------------------------------------------
+            # =================================================
             # CHART
-            # ------------------------------------------------
+            # =================================================
 
             st.subheader(
                 "📊 Emotion Confidence Distribution"
             )
-
 
             chart_data = pd.DataFrame(
                 {
@@ -480,12 +461,10 @@ if image_file is not None:
                 }
             )
 
-
             chart_data = chart_data.sort_values(
                 "Confidence",
                 ascending=False
             )
-
 
             st.bar_chart(
                 chart_data.set_index("Emotion"),
@@ -493,14 +472,13 @@ if image_file is not None:
             )
 
 
-            # ------------------------------------------------
+            # =================================================
             # DETAILED SCORES
-            # ------------------------------------------------
+            # =================================================
 
             st.subheader(
                 "📋 Detailed Emotion Scores"
             )
-
 
             for emotion, score in sorted(
                 emotion_scores.items(),
@@ -513,18 +491,16 @@ if image_file is not None:
                     "🙂"
                 )
 
-
                 st.write(
                     f"{emotion_emoji} "
                     f"**{emotion.capitalize()}** — "
-                    f"{score:.2f}%"
+                    f"{float(score):.2f}%"
                 )
-
 
                 st.progress(
                     min(
                         max(
-                            int(score),
+                            int(float(score)),
                             0
                         ),
                         100
@@ -532,16 +508,15 @@ if image_file is not None:
                 )
 
 
-            # ------------------------------------------------
+            # =================================================
             # HISTORY
-            # ------------------------------------------------
+            # =================================================
 
             st.divider()
 
             st.subheader(
                 "🕒 Detection History"
             )
-
 
             if st.session_state.history:
 
@@ -560,17 +535,15 @@ if image_file is not None:
 
             error_message = str(error)
 
-
             if (
                 "Face could not be detected"
                 in error_message
             ):
 
                 st.warning(
-                    "😕 No clear face was detected."
-                    "\n\n"
-                    "Please look directly at the "
-                    "camera and try again."
+                    "😕 No clear face was detected.\n\n"
+                    "Please look directly at the camera "
+                    "and try again."
                 )
 
             else:
@@ -641,3 +614,4 @@ st.caption(
     "AI Emotion Detector • Built with Python, "
     "OpenCV, DeepFace and Streamlit"
 )
+```
