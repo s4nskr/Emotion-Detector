@@ -1,7 +1,7 @@
 streamlit
 deepface
-opencv-python==4.10.0.84
-tensorflow
-tf-keras
-numpy
-pandas
+opencv-python==4.9.0.80
+tensorflow==2.13.1
+keras==2.13.1
+numpy==1.23.5
+pandas==2.0.3
