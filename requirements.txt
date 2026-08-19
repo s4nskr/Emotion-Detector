@@ -1,0 +1,7 @@
+streamlit
+deepface
+opencv-python==4.10.0.84
+tensorflow
+tf-keras
+numpy
+pandas
