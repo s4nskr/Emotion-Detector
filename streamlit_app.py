@@ -1,4 +1,4 @@
-```python
+
 import streamlit as st
 import cv2
 import numpy as np
@@ -614,4 +614,4 @@ st.caption(
     "AI Emotion Detector • Built with Python, "
     "OpenCV, DeepFace and Streamlit"
 )
-```
+
